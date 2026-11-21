@@ -1,9 +1,7 @@
 import java.util.List;
 import java.util.Scanner;
 
-/**
- * Menú interactivo del sistema de archivos basado en un ABB.
- */
+
 public class Main {
 
     private static final Scanner sc = new Scanner(System.in);
@@ -12,7 +10,6 @@ public class Main {
     public static void main(String[] args) {
         System.out.println("=== SISTEMA DE ARCHIVOS (ABB) ===");
 
-        // El programa inicia creando el directorio raíz
         while (arbol == null) {
             String nombreRaiz = leer("Nombre del directorio raíz: ");
             try {
@@ -54,7 +51,6 @@ public class Main {
         System.out.println("0. Salir");
     }
 
-    // ------------------------- Opciones -------------------------
 
     private static void crearDirectorio() {
         String nombre = leer("Nombre del directorio: ");
@@ -143,7 +139,6 @@ public class Main {
         }
     }
 
-    // ------------------------- Entrada -------------------------
 
     private static String leer(String mensaje) {
         System.out.print(mensaje);
@@ -159,7 +154,6 @@ public class Main {
         }
     }
 
-    /** Devuelve null si el valor no es un número válido. */
     private static Long leerTamano(String mensaje) {
         String texto = leer(mensaje).trim();
         try {
