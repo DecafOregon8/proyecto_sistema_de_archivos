@@ -1,15 +1,11 @@
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Sistema de archivos simulado con un árbol binario de búsqueda (ABB).
- * La clave de comparación es el nombre del elemento (sin distinguir mayúsculas).
- */
+
 public class ArbolArchivos {
 
     private Nodo raiz;
 
-    /** Inicia el sistema creando el directorio raíz. */
     public ArbolArchivos(String nombreRaiz) {
         String error = validarNombre(nombreRaiz);
         if (error != null) {
@@ -22,11 +18,7 @@ public class ArbolArchivos {
         return raiz;
     }
 
-    // ------------------------------------------------------------------
-    // Validaciones
-    // ------------------------------------------------------------------
 
-    /** Devuelve un mensaje de error, o null si el nombre es válido. */
     public static String validarNombre(String nombre) {
         if (nombre == null || nombre.trim().isEmpty()) {
             return "El nombre del elemento no puede estar vacío.";
@@ -34,7 +26,6 @@ public class ArbolArchivos {
         return null;
     }
 
-    /** Valida los datos de un elemento. Devuelve un mensaje de error, o null si todo está bien. */
     public static String validarElemento(Nodo nodo) {
         String error = validarNombre(nodo.getNombre());
         if (error != null) {
@@ -55,11 +46,7 @@ public class ArbolArchivos {
         return null;
     }
 
-    // ------------------------------------------------------------------
-    // Inserción
-    // ------------------------------------------------------------------
 
-    /** Inserta un elemento aplicando los criterios de inserción. Devuelve true si se insertó. */
     public boolean insertar(Nodo nuevo) {
         String error = validarElemento(nuevo);
         if (error != null) {
@@ -81,7 +68,6 @@ public class ArbolArchivos {
                 return false;
             }
 
-            // El nodo actual es un directorio: se continúa según el orden alfabético
             if (cmp < 0) {
                 if (actual.izquierdo == null) {
                     actual.izquierdo = nuevo;
@@ -98,11 +84,7 @@ public class ArbolArchivos {
         }
     }
 
-    // ------------------------------------------------------------------
-    // Búsqueda
-    // ------------------------------------------------------------------
 
-    /** Busca un elemento por nombre. Devuelve null si no existe. */
     public Nodo buscar(String nombre) {
         if (nombre == null) {
             return null;
@@ -118,11 +100,7 @@ public class ArbolArchivos {
         return null;
     }
 
-    // ------------------------------------------------------------------
-    // Eliminación
-    // ------------------------------------------------------------------
 
-    /** Elimina un archivo o directorio por nombre. Devuelve true si se eliminó. */
     public boolean eliminar(String nombre) {
         String error = validarNombre(nombre);
         if (error != null) {
@@ -140,8 +118,7 @@ public class ArbolArchivos {
             return false;
         }
 
-        // Con dos hijos, el reemplazo debe ser un directorio; si fuera un archivo
-        // quedaría con hijos y se rompería la regla de que los archivos son hojas.
+
         if (objetivo.izquierdo != null && objetivo.derecho != null
                 && !minimo(objetivo.derecho).esDirectorio()
                 && !maximo(objetivo.izquierdo).esDirectorio()) {
@@ -166,14 +143,12 @@ public class ArbolArchivos {
         } else if (cmp > 0) {
             actual.derecho = eliminarRec(actual.derecho, nombre);
         } else {
-            // Situación 1 y 2: hoja o un solo hijo
             if (actual.izquierdo == null) {
                 return actual.derecho;
             }
             if (actual.derecho == null) {
                 return actual.izquierdo;
             }
-            // Situación 3: dos hijos -> sucesor inorden (o predecesor si el sucesor es archivo)
             Nodo sucesor = minimo(actual.derecho);
             if (sucesor.esDirectorio()) {
                 Nodo nuevaDerecha = eliminarMinimo(actual.derecho);
@@ -204,7 +179,6 @@ public class ArbolArchivos {
         return nodo;
     }
 
-    /** Quita el nodo mínimo del subárbol y devuelve la nueva raíz del subárbol. */
     private Nodo eliminarMinimo(Nodo nodo) {
         if (nodo.izquierdo == null) {
             return nodo.derecho;
@@ -213,7 +187,6 @@ public class ArbolArchivos {
         return nodo;
     }
 
-    /** Quita el nodo máximo del subárbol y devuelve la nueva raíz del subárbol. */
     private Nodo eliminarMaximo(Nodo nodo) {
         if (nodo.derecho == null) {
             return nodo.izquierdo;
@@ -222,9 +195,7 @@ public class ArbolArchivos {
         return nodo;
     }
 
-    // ------------------------------------------------------------------
-    // Recorridos
-    // ------------------------------------------------------------------
+
 
     public List<Nodo> inorden() {
         List<Nodo> resultado = new ArrayList<>();
@@ -265,11 +236,7 @@ public class ArbolArchivos {
         salida.add(nodo);
     }
 
-    // ------------------------------------------------------------------
-    // Validación general del sistema
-    // ------------------------------------------------------------------
 
-    /** Revisa que todo el árbol cumpla las reglas. Devuelve la lista de problemas (vacía si es válido). */
     public List<String> validarSistema() {
         List<String> problemas = new ArrayList<>();
 
@@ -288,7 +255,6 @@ public class ArbolArchivos {
             if (n.esArchivo() && !n.esHoja()) {
                 problemas.add("'" + n.getNombre() + "': un archivo debe ser una hoja del árbol.");
             }
-            // Orden estricto en inorden => se cumple el ABB y no hay nombres duplicados
             if (i > 0 && orden.get(i - 1).getNombre().compareToIgnoreCase(n.getNombre()) >= 0) {
                 problemas.add("'" + n.getNombre() + "': rompe el orden del ABB o está duplicado.");
             }
